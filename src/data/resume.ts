@@ -12,7 +12,7 @@ export const profile = {
   email: "nathan.lin427@gmail.com",
   // Social / profile links. Remove any you don't want.
   links: {
-    github: "https://github.com/your-username",
+    github: "https://github.com/hastyhippo",
     linkedin: "https://linkedin.com/in/your-username",
     twitter: "", // leave "" to hide
   },
@@ -57,7 +57,7 @@ export const projects: Project[] = [
     name: "This Website",
     description:
       "A personal site built with React, TypeScript, Tailwind CSS, and shadcn/ui.",
-    href: "https://github.com/your-username/personal_website",
+    href: "https://github.com/hastyhippo/personal_website",
     tags: ["React", "TypeScript", "Tailwind"],
   },
   {
