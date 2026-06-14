@@ -1,208 +1,78 @@
-import { useEffect, useState } from "react"
-import { Mail, MapPin, ArrowUpRight, Moon, Sun } from "lucide-react"
-import { Github, Linkedin, Twitter } from "@/components/brand-icons"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { profile, experience, projects, skills } from "@/data/resume"
+import { useScrollReveal } from "@/lib/useScrollReveal"
+import { profile } from "@/data/resume"
+import BackgroundFX from "@/components/BackgroundFX"
+import Hero from "@/components/sections/Hero"
+import Games from "@/components/sections/Games"
+import Projects from "@/components/sections/Projects"
+import Experience from "@/components/sections/Experience"
 
-function ThemeToggle() {
-  const [dark, setDark] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches,
-  )
+const NAV = [
+  { href: "#projects", label: "Projects" },
+  { href: "#interests", label: "Games" },
+  { href: "#experience", label: "Experience" },
+]
 
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark)
-  }, [dark])
-
+function Header() {
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      aria-label="Toggle theme"
-      onClick={() => setDark((d) => !d)}
-    >
-      {dark ? <Sun className="size-5" /> : <Moon className="size-5" />}
-    </Button>
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/80 backdrop-blur">
+      <nav className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3.5">
+        <a href="#top" className="text-sm font-semibold tracking-tight text-foreground">
+          {profile.name}
+        </a>
+        <div className="flex items-center gap-6">
+          <ul className="hidden items-center gap-6 text-sm text-muted-foreground sm:flex">
+            {NAV.map((item) => (
+              <li key={item.href}>
+                <a href={item.href} className="transition-colors hover:text-foreground">
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a
+            href={`mailto:${profile.email}`}
+            className="rounded-full bg-primary px-3.5 py-1.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+          >
+            Contact
+          </a>
+        </div>
+      </nav>
+    </header>
   )
 }
 
-function Section({
-  title,
-  children,
-}: {
-  title: string
-  children: React.ReactNode
-}) {
+function Footer() {
   return (
-    <section className="mb-16">
-      <h2 className="mb-6 text-sm font-semibold uppercase tracking-widest text-muted-foreground">
-        {title}
-      </h2>
-      {children}
-    </section>
+    <footer className="border-t border-border/70 px-6 py-12">
+      <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-3 text-sm text-muted-foreground sm:flex-row">
+        <p>
+          © {new Date().getFullYear()} {profile.name}
+        </p>
+        <a
+          href={`mailto:${profile.email}`}
+          className="underline-offset-4 transition-colors hover:text-foreground hover:underline"
+        >
+          {profile.email}
+        </a>
+      </div>
+    </footer>
   )
 }
 
 export default function App() {
+  useScrollReveal()
+
   return (
-    <div className="min-h-svh bg-background text-foreground">
-      <div className="mx-auto max-w-2xl px-6 py-16">
-        {/* Header */}
-        <header className="mb-16 flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-4xl font-bold tracking-tight">
-              {profile.name}
-            </h1>
-            <p className="mt-1 text-lg text-muted-foreground">{profile.role}</p>
-            <p className="mt-4 max-w-prose text-pretty leading-relaxed">
-              {profile.tagline}
-            </p>
-
-            <div className="mt-5 flex items-center gap-3 text-sm text-muted-foreground">
-              <span className="inline-flex items-center gap-1.5">
-                <MapPin className="size-4" />
-                {profile.location}
-              </span>
-            </div>
-
-            <div className="mt-5 flex flex-wrap gap-2">
-              {profile.links.github && (
-                <Button asChild variant="outline" size="sm">
-                  <a href={profile.links.github} target="_blank" rel="noreferrer">
-                    <Github className="size-4" /> GitHub
-                  </a>
-                </Button>
-              )}
-              {profile.links.linkedin && (
-                <Button asChild variant="outline" size="sm">
-                  <a
-                    href={profile.links.linkedin}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <Linkedin className="size-4" /> LinkedIn
-                  </a>
-                </Button>
-              )}
-              {profile.links.twitter && (
-                <Button asChild variant="outline" size="sm">
-                  <a
-                    href={profile.links.twitter}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <Twitter className="size-4" /> Twitter
-                  </a>
-                </Button>
-              )}
-              {profile.email && (
-                <Button asChild variant="outline" size="sm">
-                  <a href={`mailto:${profile.email}`}>
-                    <Mail className="size-4" /> Email
-                  </a>
-                </Button>
-              )}
-            </div>
-          </div>
-          <ThemeToggle />
-        </header>
-
-        {/* Experience */}
-        <Section title="Experience">
-          <div className="space-y-4">
-            {experience.map((job) => (
-              <Card key={job.company}>
-                <CardHeader>
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-                    <CardTitle className="text-base">
-                      {job.role} · {job.company}
-                    </CardTitle>
-                    <span className="text-sm text-muted-foreground">
-                      {job.period}
-                    </span>
-                  </div>
-                  <CardDescription className="mt-1 leading-relaxed">
-                    {job.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-1.5">
-                    {job.tags.map((t) => (
-                      <Badge key={t} variant="secondary">
-                        {t}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </Section>
-
-        {/* Projects */}
-        <Section title="Projects">
-          <div className="grid gap-4 sm:grid-cols-2">
-            {projects.map((project) => (
-              <a
-                key={project.name}
-                href={project.href}
-                target="_blank"
-                rel="noreferrer"
-                className="group block"
-              >
-                <Card className="h-full transition-colors hover:border-foreground/30">
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between text-base">
-                      {project.name}
-                      <ArrowUpRight className="size-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                    </CardTitle>
-                    <CardDescription className="leading-relaxed">
-                      {project.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-1.5">
-                      {project.tags.map((t) => (
-                        <Badge key={t} variant="outline">
-                          {t}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </a>
-            ))}
-          </div>
-        </Section>
-
-        {/* Skills */}
-        <Section title="Skills">
-          <div className="flex flex-wrap gap-2">
-            {skills.map((skill) => (
-              <Badge key={skill} variant="secondary" className="text-sm">
-                {skill}
-              </Badge>
-            ))}
-          </div>
-        </Section>
-
-        {/* Footer */}
-        <footer className="border-t pt-8 text-sm text-muted-foreground">
-          <p>
-            © {new Date().getFullYear()} {profile.name}. Built with React,
-            Tailwind CSS &amp; shadcn/ui.
-          </p>
-        </footer>
-      </div>
+    <div className="min-h-svh text-foreground">
+      <BackgroundFX />
+      <Header />
+      <main>
+        <Hero />
+        <Games />
+        <Projects />
+        <Experience />
+      </main>
+      <Footer />
     </div>
   )
 }
